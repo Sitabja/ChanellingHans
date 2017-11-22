@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
 var margin = {top: 20, right: 0, bottom: 50, left: 50};
 
 //Width and height
-var outer_width = 1000;
-var outer_height = 588;
+var outer_width = 925;
+var outer_height = 550;
 var svg_width = outer_width - margin.left - margin.right;
 var svg_height = outer_height - margin.top - margin.bottom;
 var populationRange = Math.sqrt(svg_height*8)
@@ -80,7 +80,7 @@ var selectedCountry = svg.append("text")
 			.attr('y',svg_height - 150)
 			.attr("opacity",0.1)
 			.attr("id","year")
-			.attr('font-size', 50)
+			.attr('font-size', 40)
 			.attr('fill','#ccc')
 
 var LifeExp = svg.append("text")
@@ -88,7 +88,7 @@ var LifeExp = svg.append("text")
 			.attr('y',svg_height - 100)
 			.attr("opacity",0.1)
 			.attr("id","year")
-			.attr('font-size', 30)
+			.attr('font-size', 20)
 			.attr('fill','#ccc')
 
 var population = svg.append("text")
@@ -96,7 +96,7 @@ var population = svg.append("text")
 			.attr('y',svg_height - 50)
 			.attr("opacity",0.1)
 			.attr("id","year")
-			.attr('font-size', 30)
+			.attr('font-size', 20)
 			.attr('fill','#ccc')
 			
 function getRandomColor() {

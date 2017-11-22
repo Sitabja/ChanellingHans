@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	var margin = {top: 10, right: 10, bottom: 25, left: 140};
 
 	//Width and height
-	var outer_width = 450;
-	var outer_height = 280;
+	var outer_width = 400;
+	var outer_height = 250;
 	var svg_width = outer_width - margin.left - margin.right;
 	var svg_height = outer_height - margin.top - margin.bottom;
 
