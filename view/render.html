@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang = "en" class="tas-com">
+<head>
+	<meta charset="utf-8">
+	<title>D3: Selections in D3</title>
+	<script type="text/javascript" src="../d3/d3.v4.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../js/graphEvents.js"></script>
+	<script type="text/javascript" src="../js/graph.js"></script>
+	<script type="text/javascript" src="../js/utility.js"></script>
+	<script type="text/javascript" src="../js/CountriesPerRegion.js"></script>
+	<script type="text/javascript" src="../js/CountriesPerGovt.js"></script>
+	<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+	<div class="parent">
+		<div class='left-panel'>
+			<div class='year-selector-wrapper'> 
+				<div class='year-selector-button' onclick="showYearSelector()">
+					<div>
+						Select Year or Range of Years
+					</div>
+					<div>
+					   <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+						    <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
+						    <path d="M0-.25h24v24H0z" fill="none"/>
+						</svg>
+					</div>
+				</div>
+				<div class='year-selector-panel'>
+					<div class='arrow'>
+						<svg fill="#aaa" height="36" viewBox="0 0 24 24" width="36"  xmlns="http://www.w3.org/2000/svg">
+							<path d="M8 5v14l11-7z"/>
+							<path d="M0 0h24v24H0z" fill="none"/>
+						</svg>
+					</div>
+				    <div class='years'>
+				    	<div class='left-arrow' onclick='onLeftArrowClick()'>
+					    	<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
+							    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+							    <path d="M0-.75h24v24H0z" fill="none"/>
+							</svg>
+						</div>
+						<div class='right-arrow' onclick='onRightArrowClick()'>
+							<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
+							    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+							    <path d="M0-.75h24v24H0z" fill="none"/>
+							</svg>
+						</div>
+				    </div>
+				</div>
+			</div>
+			<div class='graph'>
+				
+			</div>
+			<div class='play-animation-wrapper'>
+				<div class='play-animation-button'>
+					<svg class='play' fill="#000" height="36" viewBox="0 0 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
+					    <path d="M8 5v14l11-7z"/>
+					    <path d="M0 0h24v24H0z" fill="none"/>
+					</svg>
+					<svg class='pause' fill="#000000" height="36" viewBox="0 0 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
+					    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+					    <path d="M0 0h24v24H0z" fill="none"/>
+					</svg>
+				</div>
+				
+				<div class='animation-progress'>
+					<div class=progress-bar>
+					</div>
+				</div>
+			</svg>
+			</div>
+
+		</div>
+		<div  class='right-panel'>
+			<div class="header-wrapper">
+				<div class='year-header'>
+
+				</div>
+			</div>
+			<div class='countriesPerRegion'>
+				</div>
+				<div class='countriesPerGovt'>
+			</div>
+
+		</div>
+	</div>
+</body>	 
+</html>
