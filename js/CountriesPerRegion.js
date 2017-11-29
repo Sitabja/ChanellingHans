@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			  .scale(xScale)
 			  .ticks(4);
 
-//Define Y axis
-var yAxis = d3.axisLeft()
-				  .scale(yScale)
-				  .ticks()
+	//Define Y axis
+	var yAxis = d3.axisLeft()
+					  .scale(yScale)
+					  .ticks()
 			  
 // Do everything but call the x-axis
 svg.append("g")
@@ -97,6 +97,9 @@ generateVisCountryPerRegion = function(display_year,dataset,countryColorMap){
 		   })
 		   .attr("class","regionRect")
 		   .style("fill", function(d){return countryColorMap[d.key]})
+		   .style("opacity",function(d){
+		   		return currentRegion ? currentRegion.key == d.key ? 1 : 0.2 : 1
+		   })
 	   
 
 	/******** HANDLE ENTER SELECTION ************/

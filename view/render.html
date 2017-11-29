@@ -4,49 +4,63 @@
 	<meta charset="utf-8">
 	<title>D3: Selections in D3</title>
 	<script type="text/javascript" src="../d3/d3.v4.js" charset="utf-8"></script>
-	<script type="text/javascript" src="../js/graphEvents.js"></script>
-	<script type="text/javascript" src="../js/graph.js"></script>
-	<script type="text/javascript" src="../js/utility.js"></script>
-	<script type="text/javascript" src="../js/CountriesPerRegion.js"></script>
-	<script type="text/javascript" src="../js/CountriesPerGovt.js"></script>
 	<link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
 	<div class="parent">
 		<div class='left-panel'>
-			<div class='year-selector-wrapper'> 
-				<div class='year-selector-button' onclick="showYearSelector()">
-					<div>
-						Select Year or Range of Years
+			<div class='filter-wrapper'> 
+				<div class='year-selection-wrapper'>
+					<div class='year-selector-button' onclick="showYearSelector()">
+						<div>
+							Select Year 
+						</div>
+						<div>
+						   <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24">
+							    <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
+							    <path d="M0-.25h24v24H0z" fill="none"/>
+							</svg>
+						</div>
 					</div>
-					<div>
-					   <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-						    <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-						    <path d="M0-.25h24v24H0z" fill="none"/>
-						</svg>
+					<div class='year-selector-panel'>
+						<div class='arrow'>
+							<svg fill="#aaa" height="36" viewBox="0 0 24 24" width="36">
+								<path d="M8 5v14l11-7z"/>
+								<path d="M0 0h24v24H0z" fill="none"/>
+							</svg>
+						</div>
+					    <div class='years'>
+					    	<div class='left-arrow' onclick='onLeftArrowClick()'>
+						    	<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36" >
+								    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+								    <path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</div>
+							<div class='right-arrow' onclick='onRightArrowClick()'>
+								<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36">
+								    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
+								    <path d="M0-.75h24v24H0z" fill="none"/>
+								</svg>
+							</div>
+					    </div>
 					</div>
 				</div>
-				<div class='year-selector-panel'>
-					<div class='arrow'>
-						<svg fill="#aaa" height="36" viewBox="0 0 24 24" width="36"  xmlns="http://www.w3.org/2000/svg">
-							<path d="M8 5v14l11-7z"/>
-							<path d="M0 0h24v24H0z" fill="none"/>
-						</svg>
+				<div class='country-selection-wrapper'>
+					<div class='country-selector-button' onclick="showCountySelector()">
+						<div>Select Country</div>
+						<div style='transform : rotate(90deg)'>
+						   <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24">
+							    <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
+							    <path d="M0-.25h24v24H0z" fill="none"/>
+							</svg>
+						</div>
 					</div>
-				    <div class='years'>
-				    	<div class='left-arrow' onclick='onLeftArrowClick()'>
-					    	<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
-							    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-							    <path d="M0-.75h24v24H0z" fill="none"/>
-							</svg>
+					<div class='country-selection-panel'>
+						<div class='country-selector'>
+							<div class='countries'>
+							</div>
 						</div>
-						<div class='right-arrow' onclick='onRightArrowClick()'>
-							<svg fill="#555" height="36" viewBox="0 -5 24 24" width="36" xmlns="http://www.w3.org/2000/svg">
-							    <path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/>
-							    <path d="M0-.75h24v24H0z" fill="none"/>
-							</svg>
-						</div>
-				    </div>
+					</div>
 				</div>
 			</div>
 			<div class='graph'>
@@ -73,6 +87,13 @@
 
 		</div>
 		<div  class='right-panel'>
+			<div class='reset-button'>	
+				<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+				    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				</svg>
+				<div>Reset Selection</div>
+			</div>
 			<div class="header-wrapper">
 				<div class='year-header'>
 
@@ -82,8 +103,12 @@
 				</div>
 				<div class='countriesPerGovt'>
 			</div>
-
 		</div>
 	</div>
+	<script type="text/javascript" src="../js/graphEvents.js"></script>
+	<script type="text/javascript" src="../js/graph.js"></script>
+	<script type="text/javascript" src="../js/utility.js"></script>
+	<script type="text/javascript" src="../js/CountriesPerRegion.js"></script>
+	<script type="text/javascript" src="../js/CountriesPerGovt.js"></script>
 </body>	 
 </html>

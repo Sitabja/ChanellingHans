@@ -78,16 +78,17 @@ body{
     transition: all 0.1s;
 }
 
-/*right panel*/
-.right-panel{
- 	width: 35%;
- 	background-color: #000;
- 	padding-top:50px;
- 	
-}
-.year-selector-wrapper{
+
+.filter-wrapper{
 	padding: 10px 10px 0px 10px;
+	display: flex;
+	justify-content: space-between;
 }
+
+.year-selection-wrapper{
+	position:relative;
+}
+
 .year-selector-button{
 	padding: 5px;
 	border-radius: 5px;
@@ -114,11 +115,11 @@ body{
     height: 200px;
     background-color: #000;
     position: absolute;
-    top: 5px;
-    left: 300px;
+    top: -5px;
+    left: 280px;
     border: 1px solid #aaa;
     border-radius: 10px;
-    opacity: 0;
+    display:none;
     transition: all 0.5s;
 }
 
@@ -143,6 +144,72 @@ body{
     transform: rotate(-90deg);
 }
 
+.country-selection-wrapper{
+	position:relative;
+}
+
+.country-selector-button{
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #aaa;
+	color: #000;
+	width: 250px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: all 0.8s;
+}
+.country-selector-button >div:first-child{
+	display: flex;
+	align-items: center;
+}
+.country-selector-button:hover{
+	transform: scale(1.1,1.1);
+}
+.country-selector-button:active{
+	transform: scale(0.9,0.9);
+}
+.country-selection-panel{
+	height: 210px;
+    position: absolute;
+    width: 300px;
+    left: 5px;
+    overflow: hidden;
+
+}
+.country-selector{
+	width: 250px;
+    height: 200px;
+    background-color: #000;
+    position: absolute;
+    border: 1px solid #aaa;
+    transition: all 0.5s;
+    display: block;
+    overflow: auto;
+    transform: translateY(-300px);
+}
+
+.country-selector::-webkit-scrollbar {
+    width: 5px;
+    background-color: darkgray;
+}
+ 
+.country-selector::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.country-selector::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    outline: 1px solid slategrey;
+}
+
+/*right panel*/
+.right-panel{
+ 	width: 35%;
+ 	background-color: #000;
+ 	
+}
+
 .countriesPerGovt{
 	margin-top:20px;
 }
@@ -150,7 +217,33 @@ body{
 	color: #aaa;
     font-size: 30px;
 }
+
 .header-wrapper{
 	display: flex;
 	justify-content: center;
+	margin-top: 60px;
 }
+
+.reset-button{
+	display: flex;
+    margin-top: 10px;
+    background-color: #aaa;
+    padding: 8px;
+    border-radius: 5px;
+    width: 170px;
+    margin-bottom: 10px;
+    align-items: center;
+    position: fixed;
+    right: 10px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.reset-button:hover{
+	transform: scale(1.1,1.1);
+}
+.reset-button:active{
+	transform: scale(0.9,0.9);
+}
+
+

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-		// Define margins
+	// Define margins
 	var margin = {top: 10, right: 10, bottom: 25, left: 140};
 
 	//Width and height
