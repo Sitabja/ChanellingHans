@@ -121,7 +121,7 @@ function getGDPOfSelectedCountry(filtered_dataset){
 						return
 					}
 				})
-				return fdp
+				return gdp
 			}
 //returns filtered data for current country
 function getModifiedCurrentCountry(){
