@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 		// Define margins
-	var margin = {top: 10, right: 10, bottom: 25, left: 140};
+	var margin = {top: 10, right: 20, bottom: 25, left: 140};
 
 	//Width and height
-	var outer_width = 400;
+	var outer_width = 425;
 	var outer_height = 250;
 	var svg_width = outer_width - margin.left - margin.right;
 	var svg_height = outer_height - margin.top - margin.bottom;
@@ -78,6 +78,45 @@ generateVisCountryPerRegion = function(display_year,dataset,countryColorMap){
 								return d.key;
 							});
 
+	var countryCountText = svg.selectAll(".countryCount")
+	   .data(countryCount, function key(d) {
+								return d.key;
+							});
+
+	/******** HANDLE ENTER SELECTION ************/
+  	// Create new elements in the dataset
+  	bars.enter()
+	   .append("rect")
+	   .transition()
+	   .duration(500)
+	   	   .attr("y",function(d, i) {
+		   		return yScale(d.key);
+		   })
+		   .attr("x",0)
+		   .attr("width", function(d, i) {
+		   		return xScale(d.value);	
+		   })
+		   .attr("height", function(d) {
+		   		return yScale.bandwidth();
+		   })
+	   .attr("class","regionRect")
+	   .style("fill", function(d){return countryColorMap[d.key]})
+
+	countryCountText.enter()
+				.append('text')
+				.attr("y",function(d, i) {
+				   	return yScale(d.key)+yScale.bandwidth()/2+4;
+				})
+				.attr("x",function(d, i) {
+		   			return xScale(d.value);	
+		   		})
+		   		.attr('class','countryCount')
+				.text(function(d) {return d.value})
+				.attr('fill','#ccc')
+				.style('font-size','16px')
+				.style('display','none')
+
+
 
  	/******** HANDLE UPDATE SELECTION ************/
   	// Update the display of existing elelemnts to mathc new data
@@ -86,9 +125,9 @@ generateVisCountryPerRegion = function(display_year,dataset,countryColorMap){
   	.attr("y",function(d, i) {
 		   		return yScale(d.key);
 		   })
-		   .attr("x",0)
-  	.transition()
-	   .duration(500)
+	.attr("x",0)
+  		.transition()
+	    .duration(500)
 		   .attr("width", function(d, i) {
 		   		return xScale(d.value);	
 		   })
@@ -102,32 +141,21 @@ generateVisCountryPerRegion = function(display_year,dataset,countryColorMap){
 		   })
 	   
 
-	/******** HANDLE ENTER SELECTION ************/
-  	// Create new elements in the dataset
-  	bars.enter()
-	   .append("rect")
-	   .transition()
-	   .duration(500)
-	   .attr("y",function(d, i) {
-		   		return yScale(d.key);
-		   })
-		   .attr("x",0)
-		   .attr("width", function(d, i) {
-		   		return xScale(d.value);	
-		   })
-		   .attr("height", function(d) {
-		   		return yScale.bandwidth();
-		   })
-	   .attr("class","regionRect")
-	   .style("fill", function(d){return countryColorMap[d.key]})
+   	countryCountText
+				.attr("x",function(d, i) {
+		   			return xScale(d.value);	
+		   		})
+				.text(function(d) {return d.value})
+				.style('display','none')
 	   
 	  
 	/******** HANDLE EXIT SELECTION ************/
 	// Remove bars that not longer have a matching data eleement
 	bars.exit().remove();
-  		
+  	countryCountText.exit().remove()
+
 	// Set the year label
-	d3.select(".year-header").text(display_year)
+	d3.selectAll(".year-header").text(display_year)
 }
 
 

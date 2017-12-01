@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 	isYearSelectorVisible= false
 	var year_selected = ''
-
+	//region color map
 	getColorForEachCountry = function(regionList){
 		var colorMap = []
 		colors = ["#FF5872","#00D5E9","#FFE700","#7FEB00","#ba60f7","#f780f5","#ff0f0f","#444afc"]
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		return colorMap
 	}
-
+    //year selection panel
 	populateYearSelector = function(){
 		var svg = d3.select(".years")
 			.append("svg")
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						   .style("display","none")
 					isPlay = false
 					showYearSelector()
-					generateVis(d)
+					showGraphs(d);
 				})
 
 			d3.selectAll('text')
@@ -120,14 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 		onRightArrowClick = function(){
-			console.log(year_view," ",years.length)
 			if((year_view + 1)*12 < years.length){
 				year_view++;
 				showYears();
 			}
 		}
 	}
-
+	//togle the state of year selection panel
 	showYearSelector = function(){
 		isYearSelectorVisible = !isYearSelectorVisible
 		d3.select('.year-selector-panel')
@@ -135,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		   		return isYearSelectorVisible ? 'block' : 'none'
 		   })
 	}
-
+	//country selection panel
 	populateCountrySelector = function(){
 		var svg = d3.select(".countries")
 			.append("svg")
@@ -211,6 +210,8 @@ document.addEventListener('DOMContentLoaded', function() {
 					d3.selectAll('.trace').remove()
 					showCountySelector()
 					currentRegion = ''
+					d3.selectAll('.regionRect').style('opacity',1)
+					d3.selectAll('.countryCount').style('display','none')
 						d3.select(this)
 						.transition()
 						.duration(500)
@@ -225,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						} 
 
 						currentCountry = d
-
+						showTrace()
 						d3.select('#selected_country')
 							.text(d.Country)
 
@@ -237,17 +238,17 @@ document.addEventListener('DOMContentLoaded', function() {
 							.text("GDP :" +d.GDP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 				})	
 
+
 	}
 	var isCountrySelectorVisible = false
+	//toggle country selection panel
 	showCountySelector = function(){
 		isCountrySelectorVisible = !isCountrySelectorVisible
-		d3.select('.country-selector')
-		   .style('transform',function(){
-		   		return isCountrySelectorVisible ? 'translateY(0)' : 'translateY(-300px)'
+		d3.select('.country-selection-panel')
+		   .style('height',function(){
+		   		return isCountrySelectorVisible ? '210px' : '0px'
 		   })
 	}
-
-	//populateCountrySelector()
 
 
 

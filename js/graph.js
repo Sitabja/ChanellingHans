@@ -8,7 +8,7 @@ var outer_height = 550;
 var svg_width = outer_width - margin.left - margin.right;
 var svg_height = outer_height - margin.top - margin.bottom;
 var populationRange = Math.sqrt(svg_height*6)
-
+isShowTrace = false
 
 years = []
 countryList = []
@@ -100,49 +100,40 @@ var gdp = svg.append("text")
 			.attr('font-size', 20)
 			.attr('fill','#ccc')
 			
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+//returns life expectency for the selected country for cuurent year
 function getLifeExpOfSelectedCountry(filtered_dataset){
-				var text = ''
+				var life_exp = ''
 				filtered_dataset.map((data,i)=>{
 					if(data.Country == currentCountry.Country){
-						text = Math.round(data.LifeExp,2)
+						life_exp = Math.round(data.LifeExp,2)
 						return
 					}
 				})
-				return text
+				return life_exp
 			}
-
+//returns GDP for the selected country for cuurent year
 function getGDPOfSelectedCountry(filtered_dataset){
-				var text = ''
+				var gdp = ''
 				filtered_dataset.map((data,i)=>{
 					if(data.Country == currentCountry.Country){
 						//Number with commas
-						text = data.GDP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+						gdp = data.GDP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
 						return
 					}
 				})
-				return text
+				return fdp
 			}
-
-function getModifiedCurrentCountry(filtered_dataset){
-	filtered_dataset.map((data,i)=>{
-		if(data.Country == currentCountry.Country){
-			currentCountry = data; 
-			return
-		}
-	})
+//returns filtered data for current country
+function getModifiedCurrentCountry(){
+	var filtered_data_current_country = dataset.filter((value)=>{
+			return (value.Country == currentCountry.Country)
+		});
+	return filtered_data_current_country
 }
 generateVis = function (display_year){
 
 		// Filter the data to only include the current year
-		var filtered_dataset = dataset.filter(function yearFilter(value){
+		var filtered_dataset = dataset.filter((value)=>{
 			return (value.Year == display_year)
 		});
 		
@@ -285,32 +276,71 @@ generateVis = function (display_year){
 		// Remove elements that not longer have a matching data eleement
 		points.exit().remove();
 		countryName.exit().remove()
-		//trace 
-		if(currentCountry){
-			getModifiedCurrentCountry(filtered_dataset)
-			var trace = svg.append('g')
-			trace.append('circle')
-			.transition()
-			.duration(500)
-				.attr("cx", xScale(+currentCountry.GDP))
-				.attr("cy", yScale(+currentCountry.LifeExp))
-				.attr("id",display_year+"-"+currentCountry.GDP+"-"+currentCountry.LifeExp)
-				.attr("class","trace")
-				.attr("r", zScale(Math.sqrt(+currentCountry.Population/Math.PI)))
-				.style("fill", countryColorMap[currentCountry.Region])
-				.style("stroke","#777")
-
-			// trace.append('text')
-			// 	.attr("x", xScale(+currentCountry.GDP))
-			// 	.attr("y", yScale(+currentCountry.LifeExp))
-			// 	.attr("id",'year-'+currentCountry.Country)
-			// 	.attr("class","trace-text")
-			// 	.text(display_year)
-			// 	.style("fill",'#ccc')
-			// 	.style('opacity',0)
-
-		}
+		
 }
+  showTrace = function(val){
+  	console.log( val )
+  	if(typeof val !== 'undefined'){
+  		console.log('here')
+  		isShowTrace = val
+  	}
+   	if(val || isShowTrace){
+   		var filtered_data_current_country = getModifiedCurrentCountry();
+
+   		/******** PERFORM DATA JOIN ************/
+	  	// Join new data with old elements, if any.
+		var points = svg.selectAll(".trace")
+							.data(filtered_data_current_country, function key(d){
+								return d.Country
+							});
+
+
+
+		/******** HANDLE ENTER SELECTION ************/
+	  	// Create new elements in the dataset
+	  	// Perform a data join and add points to the chart
+		points.enter()
+			.append("circle")
+			.attr("cy",svg_height)
+			.attr("cx", function(d){
+								return xScale(+d.GDP);
+							})
+			.attr("cy", function(d){
+								return yScale(+d.LifeExp);
+							})
+			.attr("id",function(d){return d.Country})
+			.attr("class","trace")
+			.attr("r", function(d){return zScale(Math.sqrt(+d.Population/Math.PI))})
+			.style("fill", function(d){return countryColorMap[d.Region]})
+			.style("stroke","#ccc")
+
+		/******** HANDLE UPDATE SELECTION ************/
+	  	// Update the display of existing elelemnts to mathc new data
+	  	// Perform a data join and add points to the chart
+			points
+			.style("opacity",1)
+				.transition()
+				.duration(500)
+				.attr("cx", function(d){
+									return xScale(+d.GDP);
+								})
+				.attr("cy", function(d){
+									return yScale(+d.LifeExp);
+								})
+				.attr("id",function(d){return d.Country})
+				.attr("r", function(d){return zScale(Math.sqrt(+d.Population/Math.PI))})
+				.style("fill", function(d){return countryColorMap[d.Region]})
+
+
+		/******** HANDLE EXIT SELECTION ************/
+		// Remove elements that not longer have a matching data eleement
+		points.exit().remove();
+				
+   	} else {
+   		d3.selectAll('.trace').remove()
+   	}
+   
+  }
 	
   showTraceYear= function(year,GDP,LifeExp){
   	d3.select('.trace-text').remove()

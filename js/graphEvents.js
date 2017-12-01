@@ -4,36 +4,64 @@
 			currentCountry=''
 			currentRegion = ''
 			hoveredCountry = ''
-			// d3.selectAll('circle').on("mouseenter",function(d){
-			// 	console.log('here')
-			// 	d3.select(this)
-			// 	.attr('cursor','pointer')
-			// })
+	
 			body = d3.select("body")
 			points = d3.selectAll("circle")
-
-
-
 
 			body.on("mouseover",function(){
 				regions = d3.selectAll(".regionRect")
 				govts = d3.selectAll(".govtRect")
 				points = d3.selectAll(".countryCircle")
 				trace = d3.selectAll('.trace')
-
-				regions.on("mouseover",function(){
+				//change the opcaity of other regions = 0.5 
+				//and display the country count of the selected region
+				regions.on("mouseover",function(region){
+					var hoveredRegion = this
 					d3.select(this)
 					.style('cursor','pointer')
-				})
 
+					d3.selectAll(".regionRect")
+					.style("opacity",function(d){
+							if(currentRegion){
+								if(d.key == currentRegion.key){
+									return 1
+								} 
+							}
+							return this != hoveredRegion ? 0.5 : 1
+						
+						})
+
+					d3.selectAll('.countryCount')
+					.style("display",function(d){
+							return (d.key != region.key) ? 'none' : 'block'
+						})
+
+
+				})
+				//remove the country count shown
+				// and all the regions visible, i.e opacity = 1
+				// if any region is already selected then make the opacity of other regions = 0.1 
+				regions.on("mouseout",function(){
+					d3.selectAll(".regionRect")
+					.style("opacity",function(d){
+							return currentRegion ? d.key!= currentRegion.key ? 0.1 : 1 : 1
+						})
+
+					d3.selectAll('.countryCount')
+					.style("display",function(d){
+							return currentRegion ? d.key != currentRegion.key ? 'none' : 'block' : 'none'
+						})
+				})
+			    //onhover make the opacity of all other bubble = 0.1 except the hovered country 
+			    //and the country already selected 
 				points.on("mouseover",function(d){
 					hoveredCircle = this
 					hoveredCountry = d
 					d3.select(this)
 					.style('cursor','pointer')
 					d3.selectAll('.countryCircle')
-						.attr("opacity",function(d1){
-							return (this != hoveredCircle && d1.Country != currentCountry.Country) ? 0.1 : 1
+						.style("opacity",function(d1){
+							return (this == hoveredCircle || d1.Country == currentCountry.Country) ? 1 : 0.1
 						})
 					d3.selectAll('#countryName')
 						.style("display",function(d1){
@@ -41,14 +69,14 @@
 						})
 					
 				})
-
+				//make opacity of all the bubble = 1 except the selected Country
 				points.on("mouseout",function(d){
 					hoveredCountry = ''
 					d3.select(this)
 					.style('cursor','pointer')
 
 					d3.selectAll('.countryCircle')
-						.attr("opacity",function(d1){
+						.style("opacity",function(d1){
 							return currentCountry ? 
 								   currentCountry.Country == d1.Country ? 1 : 0.1 
 								   : 1
@@ -58,7 +86,8 @@
 						.style("display","none")
 
 				})
-
+			    //on hover of any bubble of the trace will show the corresponding year 
+			    // and make opacity of all the bubbles in the trace = 0.1
 				trace.on('mouseover',function(d){
 					selectedTrace = this
 					d3.select(this)
@@ -69,19 +98,15 @@
 						.style('opacity',function(){
 							return this != selectedTrace ? 0.1 : 1
 						})
-					
-
-				 	//var trace_year_text = d3.select('#year-'+this.id)
+				 	
 				 	//bring to the front of the plane
-				 	console.log('data',this.GDP)
-				 	var info = this.id.split('-')
-				 	showTraceYear(info[0],info[1],info[2])
+				 	showTraceYear(d.Year,d.GDP,d.LifeExp)
 				})
-
+				//make opcaity of all the bubbles in the trace = 1 
+				//and remove the yer shown for the hovered bubble in teh trace  
 				trace.on('mouseout',function(){
 					d3.selectAll('.trace')
 						.style('opacity',1)
-
 					d3.select('.trace-text').remove()
 				})
 
@@ -91,13 +116,19 @@
 
 
 
+			
+			
 
 			body.on("click",function(){
 				regions = d3.selectAll(".regionRect")
 				points = d3.selectAll(".countryCircle")
-				govts = d3.selectAll(".govtRect")
+
 				//region bar click handler
+				// make the opacity of selected bar = 1 and others = 0.1
+				//make the countries bubbles corresponding to the region selected prominant 
+				//whereas opacity of others = 0.1
 				regions.on("click",function(region){
+					d3.selectAll('.trace').remove()
 					var clickedRegion = this
 					//reset selected Country
 					currentCountry = ''
@@ -115,7 +146,11 @@
 					.style("opacity",function(){
 							return (this != clickedRegion) ? 0.1 : 1
 						})
-
+					d3.selectAll('.countryCount')
+					.style("display",function(d){
+							return (d.key != region.key) ? 'none' : 'block'
+						})
+	
 					d3.selectAll('.countryCircle')
 						.style("opacity",function(d){
 							return (d.Region != region.key) ? 0.1 : 1
@@ -125,69 +160,51 @@
 						.transition()
 						.duration(500)
 						.style("display","none")
+
+				})
+				//make the slected country prominant using opacity
+				//show the details of the country selected
+				// make the show trace button visible
+				points.on("click",function(d){
+					currentRegion = ''
+					d3.selectAll('.regionRect').style('opacity',1)
+					d3.selectAll('.countryCount').style('display','none')
+					d3.select(this)
+					.transition()
+					.duration(500)
+					.style('cursor','pointer')
+					d3.selectAll('.countryCircle')
+					.style("opacity",function(d1){
+						return (d.Country != d1.Country) ? 0.1 : 1
+					})
+
+					if(currentCountry.Country != d.Country){
+						d3.selectAll('.trace').remove()
+					} 
+
+					currentCountry = d
+
+					d3.select('#selected_country')
+						.text(d.Country)
+
+					d3.select('#life_exp')
+						.text("Life Expectency :" +d.LifeExp)
+
+					d3.select('#gdp')
+						//number with commas
+						.text("GDP :" +d.GDP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+
+					showTrace()
+
 				})
 
-				//govts click handler
-				// govts.on("click",function(govts){
-				// 	var clickedGovt = this
-				// 	//reset selected Country
-				// 	currentCountry = ''
-				// 	d3.select('#selected_country')
-				// 			.text('')
-
-				// 		d3.select('#life_exp')
-				// 			.text("")
-
-				// 		d3.select('#population')
-				// 			.text("")
-
-				// 	d3.selectAll(".govtRect")
-				// 	.attr("opacity",function(){
-				// 			return (this != clickedGovt) ? 0.1 : 1
-				// 		})
-				// 	d3.selectAll('circle')
-				// 		.attr("opacity",function(d){
-				// 			return (d.Government != govts.key) ? 0.1 : 1
-				// 		})
-				// })
-
-				points = d3.selectAll('.countryCircle')
-				points.on("click",function(d){
-						currentRegion = ''
-						d3.select(this)
-						.transition()
-						.duration(500)
-						.style('cursor','pointer')
-						d3.selectAll('.countryCircle')
-						.style("opacity",function(d1){
-							return (d.Country != d1.Country) ? 0.1 : 1
-						})
-
-						if(currentCountry.Country != d.Country){
-							d3.selectAll('.trace').remove()
-						} 
-
-						currentCountry = d
-
-						d3.select('#selected_country')
-							.text(d.Country)
-
-						d3.select('#life_exp')
-							.text("Life Expectency :" +d.LifeExp)
-
-						d3.select('#gdp')
-							//number with commas
-							.text("GDP :" +d.GDP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
-
-
-
-					})
+				if(currentCountry){
+					d3.select('.show-trace').style('display','flex')
+				} else {
+					document.getElementById('checkbox').checked = false;
+					d3.select('.show-trace').style('display','none')
+				}
 			})
-
-	//region selector
-	// d3.selectAll('.regionRect').on('click',function(){
-	// 	console.log('ajgfjhagdsj')
-	// })
 
 	// play button 
 	d3.select(".play-animation-button").on("click",function(){
@@ -216,6 +233,7 @@
 		currentCountry=''
 		currentRegion = ''
 		hoveredCountry = ''
+		isShowTrace = false
 		d3.select('#selected_country')
 							.text('')
 
